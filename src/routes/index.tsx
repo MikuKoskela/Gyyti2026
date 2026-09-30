@@ -215,7 +215,7 @@ function Index() {
           </div>
           <div className="feature-grid">
             {t.features.items.map(([title, text], index) => {
-              const Icon = featureIcons[index];
+              const Icon = featureIcons[index] ?? Sparkles;
               return (
                 <article className="feature-item" key={title}>
                   <span className="feature-index">{String(index + 1).padStart(2, "0")}</span>
@@ -246,7 +246,7 @@ function Index() {
           <div className="section-heading"><div><p className="eyebrow">{t.useCases.eyebrow}</p><h2>{t.useCases.title}</h2></div></div>
           <div className="use-case-list">
             {t.useCases.items.map((label, index) => {
-              const Icon = useCaseIcons[index];
+              const Icon = useCaseIcons[index] ?? Users;
               return (
                 <button type="button" key={label} onClick={() => logAction(label)}>
                   <span>{String(index + 1).padStart(2, "0")}</span><Icon size={24} /><strong>{label}</strong><ChevronRight size={20} />
