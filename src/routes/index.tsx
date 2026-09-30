@@ -22,6 +22,7 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
+import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
@@ -54,7 +55,7 @@ const useCases = [
   { icon: Users, label: "Taloyhtiöt" },
 ];
 
-const features = [
+const features: Array<[LucideIcon, string, string]> = [
   [Sparkles, "Helppo käyttää", "Selkeä matkan luonti ilman turhia vaiheita."],
   [RouteIcon, "Älykäs reittien yhdistely", "Optimointimoottori yhdistää sopivat matkat."],
   [MessageCircle, "Sovelluksen sisäiset viestit", "Sovi yksityiskohdat turvallisesti sovelluksessa."],
@@ -232,11 +233,11 @@ function Index() {
               </div>
               <div className="feature-grid">
                 {features.map(([Icon, title, text], index) => (
-                  <article className="feature-item" key={title as string}>
+                  <article className="feature-item" key={title}>
                     <span className="feature-index">{String(index + 1).padStart(2, "0")}</span>
                     <Icon size={22} />
-                    <h3>{title as string}</h3>
-                    <p>{text as string}</p>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
                   </article>
                 ))}
               </div>
