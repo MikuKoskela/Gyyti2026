@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep the Gyyti experience as a single React route with an in-place first-to-second hero transition, because the primary CTA must reveal the product view without navigation.
