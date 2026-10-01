@@ -24,6 +24,7 @@ import {
 import { useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FinlandRoadMap } from "@/components/FinlandRoadMap";
 import { detectLang, storeUrl, translations, type Lang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
@@ -48,10 +49,9 @@ const featureIcons: LucideIcon[] = [Sparkles, RouteIcon, MessageCircle, Check, U
 
 function BrandMark() {
   return (
-    <div className="flex items-center gap-3" aria-label="Gyyti">
-      <span className="brand-mark"><MapPin size={18} strokeWidth={2.4} /></span>
-      <span className="font-display text-lg font-semibold uppercase tracking-[0.18em] text-foreground">Gyyti</span>
-    </div>
+    <a className="brand-mark-link" href="/" aria-label="Gyyti">
+      <img className="brand-logo" src="/Gyyti-light.png" alt="Gyyti" />
+    </a>
   );
 }
 
@@ -156,11 +156,11 @@ function Index() {
         )}
       </header>
 
-      <section className="hero-stage">
-        <RoadNetwork dense />
+      <section className="hero-stage hero-finfinder">
+        <FinlandRoadMap />
         <div className="map-grid" />
         <div className="hero-vignette" />
-        <div key={autonomous ? "b" : "a"} className="animate-stage-in relative z-10 mx-auto flex max-w-5xl flex-col items-center px-5 pt-20 text-center">
+        <div key={autonomous ? "b" : "a"} className="hero-copy animate-stage-in">
           {autonomous ? (
             <>
               <p className="eyebrow">{t.hero2.eyebrow}</p>
@@ -172,7 +172,6 @@ function Index() {
             </>
           ) : (
             <>
-              <div className="hero-logo mb-8"><MapPin size={34} /><span>G</span></div>
               <p className="eyebrow">{t.hero.eyebrow}</p>
               <h1 className="mt-5 font-display text-5xl font-semibold leading-[0.95] sm:text-7xl lg:text-8xl">
                 {t.hero.title1}<br /><span className="text-accent">{t.hero.title2}</span>
@@ -191,23 +190,29 @@ function Index() {
           <Button className="mt-4" onClick={openStore}>{t.hero.cta} <ArrowRight size={16} /></Button>
         </div>
         <div className="hero-status" aria-hidden="true">
-          <span>60.1699° N</span><span>LIVE ROUTING</span><span>24.9384° E</span>
+          <span>60.1699° N</span><span>{t.hero.country}</span><span>24.9384° E</span>
         </div>
       </section>
 
       <section className="partner-strip" aria-label={t.partners.title}>
         <p>{t.partners.title}</p>
-        <div className="partner-floats">
-          {[1, 2, 3, 4].map((n) => (
-            <div className="partner-float" key={n} role="img" aria-label={`${t.partners.slot} ${n}`}>
-              <ImageIcon size={20} />
-              <span>{t.partners.slot}</span>
-            </div>
-          ))}
+        <div className="partner-marquee">
+          <div className="partner-floats">
+            {[0, 1].map((copy) => (
+              <div className="partner-logo-group" key={copy} aria-hidden={copy === 1}>
+                {Array.from({ length: 5 }, (_, index) => (
+                  <div className="partner-float" key={index} role="img" aria-label={t.partners.slot}>
+                    <span className="partner-logo-icon"><ImageIcon size={25} strokeWidth={1.6} /></span>
+                    <span className="partner-logo-caption">{t.partners.slot}</span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section id="ominaisuudet" className="content-section border-y border-border">
+      <section id="ominaisuudet" className="content-section">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="section-heading">
             <div><p className="eyebrow">{t.features.eyebrow}</p><h2>{t.features.title}</h2></div>
@@ -257,7 +262,7 @@ function Index() {
         </div>
       </section>
 
-      <section className="content-section border-y border-border bg-secondary">
+      <section className="content-section bg-secondary">
         <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
             <p className="eyebrow">Scope 1–3</p>
