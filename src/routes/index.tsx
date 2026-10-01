@@ -200,7 +200,7 @@ function Index() {
           <div className="partner-floats">
             {[0, 1].map((copy) => (
               <div className="partner-logo-group" key={copy} aria-hidden={copy === 1}>
-                {Array.from({ length: 5 }, (_, index) => (
+                {Array.from({ length: 8 }, (_, index) => (
                   <div className="partner-float" key={index} role="img" aria-label={t.partners.slot}>
                     <span className="partner-logo-icon"><ImageIcon size={25} strokeWidth={1.6} /></span>
                     <span className="partner-logo-caption">{t.partners.slot}</span>
