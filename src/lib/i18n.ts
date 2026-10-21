@@ -94,7 +94,7 @@ export const translations = {
       ],
     },
     scope: {
-      title: "Työmatkaraportointi, jonka voi näyttää toteen.",
+      title: "Työmatka-raportointi, jonka voi tarkistaa.",
       text: "Näe työmatkojen kustannukset, käyttöaste ja päästövaikutukset samassa näkymässä. Raportointi tukee organisaatiosi vastuullisuustyötä.",
       cta: "Pyydä esittely",
       report: "Avaa raportti",
