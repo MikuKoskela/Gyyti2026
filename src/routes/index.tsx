@@ -16,14 +16,16 @@ import {
   Menu,
   MessageCircle,
   RouteIcon,
+  Send,
   ShieldCheck,
   Sparkles,
   Users,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FinlandRoadMap } from "@/components/FinlandRoadMap";
 import { detectLang, storeUrl, translations, type Lang } from "@/lib/i18n";
 
@@ -33,10 +35,13 @@ export const Route = createFileRoute("/")({
       { title: "Gyyti — Kyydinjakopalvelu" },
       {
         name: "description",
-        content: "Gyyti yhdistää matkat älykkäällä reittioptimoinnilla ja kutsuohjatulla liikenteellä.",
+        content: "Gyyti on kyydinjakopalvelu, joka yhdistää samaan suuntaan kulkevat ihmiset työmatkoille, tapahtumiin ja yhteisöihin.",
       },
       { property: "og:title", content: "Gyyti — Kyydinjakopalvelu" },
-      { property: "og:description", content: "Älykkäämpi tapa yhdistää työmatkat, tapahtumat ja yhteisöt." },
+      {
+        property: "og:description",
+        content: "Gyyti yhdistää samaan suuntaan kulkevat ihmiset työmatkoille, tapahtumiin ja yhteisöihin.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -45,6 +50,20 @@ export const Route = createFileRoute("/")({
 });
 
 const useCaseIcons: LucideIcon[] = [CalendarDays, Building2, Dumbbell, GraduationCap, Users];
+const useCaseImages = [
+  "/use-case-events.webp",
+  "/use-case-commuting.webp",
+  "/use-case-workouts.webp",
+  "/use-case-universities.webp",
+  "/use-case-housing.webp",
+];
+const useCasePhotoUrls = [
+  "https://unsplash.com/photos/people-gathering-on-concert-during-daytime-eiQqGBAMgIE",
+  "https://unsplash.com/photos/a-group-of-people-walking-down-a-street-next-to-tall-buildings-DanOxaF3CsY",
+  "https://unsplash.com/photos/men-and-women-running-on-sea-shore-c59hEeerAaI",
+  "https://unsplash.com/photos/students-talking-and-laughing-in-a-lecture-hall-TB5HpfJf7mA",
+  "https://unsplash.com/photos/a-group-of-people-sitting-on-a-couch-in-a-living-room-W5phBffrIH4",
+];
 const featureIcons: LucideIcon[] = [Sparkles, RouteIcon, MessageCircle, Check, Users, Clock3, ShieldCheck, Leaf];
 
 function BrandMark() {
@@ -79,15 +98,59 @@ function RoadNetwork({ dense = false }: { dense?: boolean }) {
   );
 }
 
-function VisualPlaceholder({ label, suffix }: { label: string; suffix: string }) {
+function RoutePreview({ label }: { label: string }) {
   return (
-    <div className="visual-placeholder" role="img" aria-label={`${label} — ${suffix}`}>
+    <div className="visual-panel visual-panel-routes" role="img" aria-label={label}>
       <RoadNetwork dense />
       <div className="visual-grid" />
-      <div className="relative z-10 flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-muted-foreground">
-        <span className="status-dot" /> {label}
-      </div>
+      <div className="visual-panel-heading"><span className="status-dot" />{label}</div>
     </div>
+  );
+}
+
+function ScopeImpactIllustration({ title }: { title: string }) {
+  return (
+    <svg
+      className="scope-impact-illustration"
+      viewBox="0 0 560 390"
+      role="img"
+      aria-labelledby="scope-illustration-title scope-illustration-description"
+    >
+      <title id="scope-illustration-title">{title}</title>
+      <desc id="scope-illustration-description">{title}</desc>
+      <defs>
+        <linearGradient id="scope-card-fill" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#17344d" />
+          <stop offset="100%" stopColor="#0c1b2a" />
+        </linearGradient>
+        <linearGradient id="scope-route-stroke" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#548fe3" stopOpacity=".2" />
+          <stop offset="50%" stopColor="#8bdcff" />
+          <stop offset="100%" stopColor="#548fe3" stopOpacity=".25" />
+        </linearGradient>
+        <radialGradient id="scope-glow">
+          <stop offset="0%" stopColor="#68caff" stopOpacity=".2" />
+          <stop offset="100%" stopColor="#68caff" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <rect x="1" y="1" width="558" height="388" rx="26" fill="url(#scope-card-fill)" stroke="#8bdcff" strokeOpacity=".2" />
+      <circle cx="468" cy="88" r="142" fill="url(#scope-glow)" />
+      <path d="M32 280H528M32 310H528M32 340H528M80 250V360M160 250V360M240 250V360M320 250V360M400 250V360M480 250V360" stroke="#8bdcff" strokeOpacity=".055" />
+      <text x="36" y="47" fill="#91a9bf" fontFamily="Space Grotesk, sans-serif" fontSize="11" fontWeight="600" letterSpacing="2.2">{title.toLocaleUpperCase()}</text>
+      <path d="M91 164C144 164 159 137 214 137s75 53 131 53 73-26 124-26" fill="none" stroke="#14304a" strokeWidth="13" strokeLinecap="round" />
+      <path d="M91 164C144 164 159 137 214 137s75 53 131 53 73-26 124-26" fill="none" stroke="url(#scope-route-stroke)" strokeWidth="2.5" strokeLinecap="round" />
+      {[91, 214, 345, 469].map((x, index) => (
+        <circle key={x} cx={x} cy={[164, 137, 190, 164][index]} r={index === 1 || index === 2 ? 4 : 3} fill="#9be2ff" />
+      ))}
+      {["01", "02", "03"].map((number, index) => (
+        <g key={number} transform={`translate(${[20, 209, 398][index]} 222)`}>
+          <rect width="142" height="96" rx="15" fill="#081522" fillOpacity=".72" stroke="#8bdcff" strokeOpacity=".19" />
+          <text x="16" y="38" fill={index === 1 ? "#9be2ff" : "#6e9ed5"} fontFamily="Space Grotesk, sans-serif" fontSize="12" fontWeight="700" letterSpacing="1.5">{`SCOPE ${number}`}</text>
+          <path d="M16 67H126" stroke="#8bdcff" strokeOpacity=".18" />
+          <circle cx="120" cy="67" r="3" fill="#8bdcff" fillOpacity=".7" />
+        </g>
+      ))}
+    </svg>
   );
 }
 
@@ -95,6 +158,9 @@ function Index() {
   const [lang, setLang] = useState<Lang>("fi");
   const [autonomous, setAutonomous] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
+  const [openUseCases, setOpenUseCases] = useState<number[]>([]);
   const t = translations[lang];
 
   useEffect(() => { setLang(detectLang()); }, []);
@@ -110,6 +176,16 @@ function Index() {
     const url = storeUrl();
     logAction(`Avaa sovelluskauppa: ${url}`);
     window.open(url, "_blank", "noopener");
+  };
+  const sendContactMessage = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const name = String(form.get("name") ?? "").trim();
+    const email = String(form.get("email") ?? "").trim();
+    const message = String(form.get("message") ?? "").trim();
+    const subject = encodeURIComponent(`${t.footer.emailSubject} — ${name}`);
+    const body = encodeURIComponent(`${t.footer.name}: ${name}\n${t.footer.email}: ${email}\n\n${message}`);
+    window.location.href = `mailto:hello@gyyti.fi?subject=${subject}&body=${body}`;
   };
 
   const LangSwitch = (
@@ -196,14 +272,17 @@ function Index() {
 
       <section className="partner-strip" aria-label={t.partners.title}>
         <p>{t.partners.title}</p>
-        <div className="partner-marquee">
-          <div className="partner-floats">
+        <div className="partner-carousel" role="region" aria-label={t.partners.carouselLabel}>
+          <div className="partner-carousel-track">
             {[0, 1].map((copy) => (
-              <div className="partner-logo-group" key={copy} aria-hidden={copy === 1}>
-                {Array.from({ length: 8 }, (_, index) => (
-                  <div className="partner-float" key={index} role="img" aria-label={t.partners.slot}>
-                    <span className="partner-logo-icon"><ImageIcon size={25} strokeWidth={1.6} /></span>
-                    <span className="partner-logo-caption">{t.partners.slot}</span>
+              <div className="partner-carousel-group" key={copy} aria-hidden={copy === 1}>
+                {t.useCases.items.map((item, index) => (
+                  <div className="partner-ad-card" key={item.title}>
+                    <div className="partner-ad-art">
+                      <span className="partner-ad-image"><ImageIcon size={21} strokeWidth={1.5} /></span>
+                      <span className="partner-ad-message">{t.partners.slot}</span>
+                    </div>
+                    <span className="partner-ad-category">{item.title}</span>
                   </div>
                 ))}
               </div>
@@ -236,7 +315,7 @@ function Index() {
 
       <section id="optimointi" className="content-section bg-secondary">
         <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-2">
-          <VisualPlaceholder label={t.optim.visual} suffix={t.placeholder} />
+          <RoutePreview label={t.optim.visual} />
           <div>
             <p className="eyebrow">{t.optim.eyebrow}</p>
             <h2>{t.optim.title}</h2>
@@ -248,14 +327,46 @@ function Index() {
 
       <section id="kayttokohteet" className="content-section">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
-          <div className="section-heading"><div><p className="eyebrow">{t.useCases.eyebrow}</p><h2>{t.useCases.title}</h2></div></div>
+          <div className="section-heading">
+            <div><p className="eyebrow">{t.useCases.eyebrow}</p><h2>{t.useCases.title}</h2></div>
+            <p>{t.useCases.intro}</p>
+          </div>
           <div className="use-case-list">
-            {t.useCases.items.map((label, index) => {
+            {t.useCases.items.map((item, index) => {
               const Icon = useCaseIcons[index] ?? Users;
+              const isOpen = openUseCases.includes(index);
+              const triggerId = `use-case-trigger-${index}`;
+              const panelId = `use-case-panel-${index}`;
               return (
-                <button type="button" key={label} onClick={() => logAction(label)}>
-                  <span>{String(index + 1).padStart(2, "0")}</span><Icon size={24} /><strong>{label}</strong><ChevronRight size={20} />
-                </button>
+                <article className={`use-case-entry${isOpen ? " is-open" : ""}`} key={item.title}>
+                  <button
+                    id={triggerId}
+                    type="button"
+                    className="use-case-trigger"
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    onClick={() => setOpenUseCases((open) => (
+                      open.includes(index) ? open.filter((itemIndex) => itemIndex !== index) : [...open, index]
+                    ))}
+                  >
+                    <span className="use-case-number">{String(index + 1).padStart(2, "0")}</span>
+                    <Icon size={23} aria-hidden="true" />
+                    <strong>{item.title}</strong>
+                    <span className="use-case-toggle-label">{isOpen ? t.useCases.close : t.useCases.open}</span>
+                    <ChevronRight className="use-case-chevron" size={20} aria-hidden="true" />
+                  </button>
+                  <div id={panelId} className="use-case-panel" role="region" aria-labelledby={triggerId} hidden={!isOpen}>
+                    <div className="use-case-photo">
+                      <img src={useCaseImages[index]} alt={item.imageAlt} loading="lazy" />
+                      <a href={useCasePhotoUrls[index]} target="_blank" rel="noreferrer">{t.useCases.photoCredit}</a>
+                    </div>
+                    <div className="use-case-copy">
+                      <p className="use-case-badge"><span />{t.useCases.sharedRide}</p>
+                      <h3>{item.lead}</h3>
+                      <p>{item.description}</p>
+                    </div>
+                  </div>
+                </article>
               );
             })}
           </div>
@@ -263,16 +374,44 @@ function Index() {
       </section>
 
       <section className="content-section bg-secondary">
-        <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-[0.8fr_1.2fr]">
-          <div>
+        <div className="scope-content mx-auto max-w-7xl px-5 sm:px-8">
+          <div className="scope-copy">
             <p className="eyebrow">Scope 1–3</p>
             <h2>{t.scope.title}</h2>
             <p className="section-copy">{t.scope.text}</p>
-            <Button variant="outline" className="mt-8" onClick={() => logAction("Pyydä raportoinnin esittely")}>{t.scope.cta} <ArrowRight size={16} /></Button>
           </div>
-          <VisualPlaceholder label={t.scope.visual} suffix={t.placeholder} />
+          <div className="scope-visual">
+            <ScopeImpactIllustration title={t.scope.illustrationTitle} />
+          </div>
+        </div>
+        <div className="scope-details mx-auto max-w-7xl px-5 sm:px-8">
+          {t.scope.items.map((item, index) => (
+            <article className="scope-detail" key={item.name}>
+              <p className="scope-detail-label"><span>{`0${index + 1}`}</span>{item.name}</p>
+              <p className="scope-detail-title">{item.category}</p>
+              <p className="scope-detail-description">{item.description}</p>
+              <p className={`scope-influence scope-influence-${index + 1}`}><span />{item.influence}</p>
+            </article>
+          ))}
+        </div>
+        <div className="scope-actions mx-auto mt-8 flex max-w-7xl flex-wrap gap-3 px-5 sm:px-8">
+          <Button variant="outline" onClick={() => logAction("Pyydä raportoinnin esittely")}>{t.scope.cta} <ArrowRight size={16} /></Button>
+          <Button onClick={() => setReportOpen(true)}>{t.scope.report} <ArrowRight size={16} /></Button>
         </div>
       </section>
+
+      <Dialog open={reportOpen} onOpenChange={setReportOpen}>
+        <DialogContent className="h-[92vh] w-[min(96vw,1100px)] max-w-none grid-rows-[auto_minmax(0,1fr)] gap-3 overflow-hidden p-5 sm:p-6">
+          <DialogHeader>
+            <DialogTitle>{t.scope.title}</DialogTitle>
+          </DialogHeader>
+          <iframe
+            className="h-full min-h-0 w-full rounded-md border-0"
+            src="/GyytiRaportointi.pdf"
+            title={t.scope.report}
+          />
+        </DialogContent>
+      </Dialog>
 
       <section id="yhteiso" className="community-section">
         <RoadNetwork />
@@ -288,13 +427,50 @@ function Index() {
 
       <footer className="site-footer">
         <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 lg:grid-cols-[1.6fr_repeat(3,1fr)]">
-          <div><BrandMark /><p className="mt-5 max-w-sm text-sm leading-6 text-muted-foreground">{t.footer.text}</p></div>
+          <div><BrandMark /><p className="footer-description mt-5 max-w-sm text-sm leading-6 text-muted-foreground">{t.footer.text}</p></div>
           <div><h3>{t.download}</h3><button onClick={openStore}>App Store</button><button onClick={openStore}>Google Play</button></div>
-          <div><h3>{t.footer.contact}</h3><button onClick={() => logAction("Yhteydenottolomake")}>{t.footer.form}</button><a href="mailto:hello@gyyti.fi"><Mail size={14} /> hello@gyyti.fi</a></div>
-          <div><h3>{t.footer.follow}</h3><button onClick={() => logAction("LinkedIn")}>LinkedIn</button><button onClick={() => logAction("Instagram")}>Instagram</button><button onClick={() => logAction("Navigointi")}>{t.footer.navigation}</button></div>
+          <div><h3>{t.footer.contact}</h3><button onClick={() => setContactOpen(true)}>{t.footer.form}</button><span className="footer-email"><Mail size={14} /> hello@gyyti.fi</span></div>
+          <div>
+            <h3>{t.footer.follow}</h3>
+            <a href="https://www.instagram.com/gyytiapp/" target="_blank" rel="noreferrer">Instagram</a>
+            <a href="https://www.tiktok.com/@gyytiapp?lang=en" target="_blank" rel="noreferrer">TikTok</a>
+          </div>
         </div>
         <div className="footer-base"><span>© 2026 Gyyti</span><span>{t.footer.made}</span></div>
       </footer>
+
+      <Dialog open={contactOpen} onOpenChange={setContactOpen}>
+        <DialogContent className="contact-dialog max-h-[92vh] w-[min(94vw,560px)] max-w-none gap-0 overflow-y-auto border-border/70 bg-background p-0">
+          <div className="contact-dialog-art" aria-hidden="true">
+            <span className="contact-dialog-art-mark">G</span>
+            <span className="contact-dialog-art-line contact-dialog-art-line-one" />
+            <span className="contact-dialog-art-line contact-dialog-art-line-two" />
+          </div>
+          <div className="px-6 pb-7 pt-6 sm:px-8 sm:pb-8">
+            <DialogHeader className="mb-6 space-y-3 text-left">
+              <p className="eyebrow">Gyyti · {t.footer.contact}</p>
+              <DialogTitle className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.footer.formTitle}</DialogTitle>
+              <DialogDescription className="leading-relaxed">{t.footer.formDescription}</DialogDescription>
+            </DialogHeader>
+            <form className="contact-form" onSubmit={sendContactMessage}>
+              <label>
+                <span>{t.footer.name}</span>
+                <input autoComplete="name" name="name" required />
+              </label>
+              <label>
+                <span>{t.footer.email}</span>
+                <input autoComplete="email" name="email" type="email" required />
+                <small>{t.footer.emailRequired}</small>
+              </label>
+              <label>
+                <span>{t.footer.message}</span>
+                <textarea name="message" rows={4} required />
+              </label>
+              <Button type="submit" className="mt-1 w-full sm:w-auto">{t.footer.send} <Send size={16} /></Button>
+            </form>
+          </div>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }

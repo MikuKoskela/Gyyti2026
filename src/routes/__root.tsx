@@ -81,10 +81,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Älykkäämpi kyydinjakopalvelu." },
       { name: "author", content: "Gyyti" },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Gyyti" },
+      { property: "og:url", content: "https://gyyti.com/" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "canonical", href: "https://gyyti.com/" },
       {
         rel: "stylesheet",
         href: appCss,
@@ -106,7 +108,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="fi">
       <head>
         <HeadContent />
       </head>
