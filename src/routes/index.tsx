@@ -16,16 +16,15 @@ import {
   Menu,
   MessageCircle,
   RouteIcon,
-  Send,
   ShieldCheck,
   Sparkles,
   Users,
   X,
 } from "lucide-react";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FinlandRoadMap } from "@/components/FinlandRoadMap";
 import { detectLang, storeUrl, translations, type Lang } from "@/lib/i18n";
 
@@ -176,16 +175,6 @@ function Index() {
     const url = storeUrl();
     logAction(`Avaa sovelluskauppa: ${url}`);
     window.open(url, "_blank", "noopener");
-  };
-  const sendContactMessage = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const name = String(form.get("name") ?? "").trim();
-    const email = String(form.get("email") ?? "").trim();
-    const message = String(form.get("message") ?? "").trim();
-    const subject = encodeURIComponent(`${t.footer.emailSubject} — ${name}`);
-    const body = encodeURIComponent(`${t.footer.name}: ${name}\n${t.footer.email}: ${email}\n\n${message}`);
-    window.location.href = `mailto:hello@gyyti.fi?subject=${subject}&body=${body}`;
   };
 
   const LangSwitch = (
@@ -441,33 +430,18 @@ function Index() {
 
       <Dialog open={contactOpen} onOpenChange={setContactOpen}>
         <DialogContent className="contact-dialog max-h-[92vh] w-[min(94vw,560px)] max-w-none gap-0 overflow-y-auto border-border/70 bg-background p-0">
-          <div className="contact-dialog-art" aria-hidden="true">
-            <span className="contact-dialog-art-mark">G</span>
-            <span className="contact-dialog-art-line contact-dialog-art-line-one" />
-            <span className="contact-dialog-art-line contact-dialog-art-line-two" />
-          </div>
           <div className="px-6 pb-7 pt-6 sm:px-8 sm:pb-8">
-            <DialogHeader className="mb-6 space-y-3 text-left">
+            <DialogHeader className="mb-3 text-left">
               <p className="eyebrow">Gyyti · {t.footer.contact}</p>
               <DialogTitle className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.footer.formTitle}</DialogTitle>
-              <DialogDescription className="leading-relaxed">{t.footer.formDescription}</DialogDescription>
             </DialogHeader>
-            <form className="contact-form" onSubmit={sendContactMessage}>
-              <label>
-                <span>{t.footer.name}</span>
-                <input autoComplete="name" name="name" required />
-              </label>
-              <label>
-                <span>{t.footer.email}</span>
-                <input autoComplete="email" name="email" type="email" required />
-                <small>{t.footer.emailRequired}</small>
-              </label>
-              <label>
-                <span>{t.footer.message}</span>
-                <textarea name="message" rows={4} required />
-              </label>
-              <Button type="submit" className="mt-1 w-full sm:w-auto">{t.footer.send} <Send size={16} /></Button>
-            </form>
+            <iframe
+              className="w-full border-0"
+              src="https://tally.so/embed/Z9jvrv?alignLeft=1&hideTitle=1&transparentBackground=1"
+              title={t.footer.formTitle}
+              height="620"
+              loading="lazy"
+            />
           </div>
         </DialogContent>
       </Dialog>
