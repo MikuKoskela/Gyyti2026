@@ -9,7 +9,6 @@ import {
   Clock3,
   Dumbbell,
   GraduationCap,
-  ImageIcon,
   Leaf,
   Mail,
   MapPin,
@@ -158,12 +157,42 @@ function Index() {
   const [autonomous, setAutonomous] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
-  const [contactOpen, setContactOpen] = useState(false);
   const [openUseCases, setOpenUseCases] = useState<number[]>([]);
   const t = translations[lang];
 
   useEffect(() => { setLang(detectLang()); }, []);
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
+  useEffect(() => {
+    const widgetScriptSrc = "https://tally.so/widgets/embed.js";
+    const loadEmbeds = () => {
+      const tally = (window as Window & { Tally?: { loadEmbeds: () => void } }).Tally;
+      if (tally) {
+        tally.loadEmbeds();
+        return;
+      }
+
+      document.querySelectorAll<HTMLIFrameElement>("iframe[data-tally-src]:not([src])").forEach((iframe) => {
+        iframe.src = iframe.dataset.tallySrc ?? "";
+      });
+    };
+
+    const existingScript = document.querySelector<HTMLScriptElement>(`script[src="${widgetScriptSrc}"]`);
+    if (existingScript) {
+      if ((window as Window & { Tally?: { loadEmbeds: () => void } }).Tally) {
+        loadEmbeds();
+      } else {
+        existingScript.addEventListener("load", loadEmbeds, { once: true });
+        existingScript.addEventListener("error", loadEmbeds, { once: true });
+      }
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = widgetScriptSrc;
+    script.addEventListener("load", loadEmbeds, { once: true });
+    script.addEventListener("error", loadEmbeds, { once: true });
+    document.body.appendChild(script);
+  }, [lang]);
 
   const changeLang = (next: Lang) => {
     setLang(next);
@@ -259,24 +288,25 @@ function Index() {
         </div>
       </section>
 
-      <section className="partner-strip" aria-label={t.partners.title}>
-        <p>{t.partners.title}</p>
-        <div className="partner-carousel" role="region" aria-label={t.partners.carouselLabel}>
-          <div className="partner-carousel-track">
-            {[0, 1].map((copy) => (
-              <div className="partner-carousel-group" key={copy} aria-hidden={copy === 1}>
-                {t.useCases.items.map((item, index) => (
-                  <div className="partner-ad-card" key={item.title}>
-                    <div className="partner-ad-art">
-                      <span className="partner-ad-image"><ImageIcon size={21} strokeWidth={1.5} /></span>
-                      <span className="partner-ad-message">{t.partners.slot}</span>
-                    </div>
-                    <span className="partner-ad-category">{item.title}</span>
-                  </div>
-                ))}
-              </div>
-            ))}
+      <section id="contact" className="content-section contact-section bg-secondary">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">{t.footer.contact}</p>
+              <h2>{t.footer.formTitle}</h2>
+            </div>
           </div>
+          <iframe
+            key={lang}
+            className="contact-form-embed mx-auto w-full border-0"
+            data-tally-src={`https://tally.so/embed/${lang === "fi" ? "Z9jvrv" : "jeaYL9"}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`}
+            title={t.footer.formTitle}
+            height="200"
+            loading="lazy"
+            frameBorder={0}
+            marginHeight={0}
+            marginWidth={0}
+          />
         </div>
       </section>
 
@@ -418,7 +448,7 @@ function Index() {
         <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 lg:grid-cols-[1.6fr_repeat(3,1fr)]">
           <div><BrandMark /><p className="footer-description mt-5 max-w-sm text-sm leading-6 text-muted-foreground">{t.footer.text}</p></div>
           <div><h3>{t.download}</h3><button onClick={openStore}>App Store</button><button onClick={openStore}>Google Play</button></div>
-          <div><h3>{t.footer.contact}</h3><button onClick={() => setContactOpen(true)}>{t.footer.form}</button><span className="footer-email"><Mail size={14} /> hello@gyyti.fi</span></div>
+          <div><h3>{t.footer.contact}</h3><a href="#contact">{t.footer.form}</a><span className="footer-email"><Mail size={14} /> hello@gyyti.fi</span></div>
           <div>
             <h3>{t.footer.follow}</h3>
             <a href="https://www.instagram.com/gyytiapp/" target="_blank" rel="noreferrer">Instagram</a>
@@ -428,23 +458,6 @@ function Index() {
         <div className="footer-base"><span>© 2026 Gyyti</span><span>{t.footer.made}</span></div>
       </footer>
 
-      <Dialog open={contactOpen} onOpenChange={setContactOpen}>
-        <DialogContent className="contact-dialog max-h-[92vh] w-[min(94vw,560px)] max-w-none gap-0 overflow-y-auto border-border/70 bg-background p-0">
-          <div className="px-6 pb-7 pt-6 sm:px-8 sm:pb-8">
-            <DialogHeader className="mb-3 text-left">
-              <p className="eyebrow">Gyyti · {t.footer.contact}</p>
-              <DialogTitle className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.footer.formTitle}</DialogTitle>
-            </DialogHeader>
-            <iframe
-              className="w-full border-0"
-              src="https://tally.so/embed/Z9jvrv?alignLeft=1&hideTitle=1&transparentBackground=1"
-              title={t.footer.formTitle}
-              height="620"
-              loading="lazy"
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
     </main>
   );
 }
