@@ -283,8 +283,12 @@
 /* Hero mode toggle */
 .hero-toggle { position: relative; display: inline-flex; align-items: center; gap: .6rem; min-height: 2.75rem; padding: 0 1.2rem; border-radius: 999px; border: 1px solid color-mix(in oklab, var(--accent) 45%, transparent); background: color-mix(in oklab, var(--primary) 14%, transparent); color: var(--foreground); font: 500 .82rem var(--font-display); letter-spacing: .02em; transition: border-color .25s ease, background-color .25s ease, transform .25s ease; }
 .hero-toggle:hover { border-color: var(--accent); background: color-mix(in oklab, var(--primary) 26%, transparent); transform: translateY(-1px); }
-.hero-toggle .toggle-dot { width: .5rem; height: .5rem; border-radius: 999px; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent); }
-.hero-toggle[aria-pressed="true"] .toggle-dot { background: var(--primary); }
+.toggle-brand-mark { display: grid; width: 1.8rem; height: 1.8rem; flex: 0 0 auto; place-items: center; overflow: hidden; border: 1px solid color-mix(in oklab, var(--foreground) 16%, transparent); border-radius: .6rem; box-shadow: 0 2px 8px #0003; transition: transform .25s ease; }
+.hero-toggle:hover .toggle-brand-mark { transform: scale(1.06); }
+.toggle-brand-bliq { background: #303735; }
+.toggle-brand-bliq img { display: block; width: 1.2rem; height: auto; }
+.toggle-brand-gyyti { background: var(--brand-blue); }
+.toggle-brand-gyyti img { display: block; width: 1.45rem; height: 1.45rem; object-fit: cover; }
 .hero-metrics { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 2rem; color: var(--muted-foreground); font-size: .85rem; }
 .hero-metrics b { color: var(--foreground); font-family: var(--font-display); margin-right: .35rem; }
 
@@ -309,6 +313,60 @@
 .contact-form textarea { min-height: 7rem; resize: vertical; }
 .contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent); background: var(--background); box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 18%, transparent); }
 .contact-form small { color: var(--muted-foreground); font-size: .72rem; font-weight: 400; }
+
+.hero-autonomous { align-items: center; padding-block: 7rem 3rem; background: radial-gradient(ellipse at 8% 8%, #4c7fd526, transparent 44%), radial-gradient(ellipse at 92% 88%, #aeb7a01a, transparent 42%), var(--background); color: var(--foreground); }
+.hero-autonomous .hero-map, .hero-autonomous .map-grid, .hero-autonomous .hero-vignette, .hero-autonomous .hero-status { display: none; }
+.hero-autonomous .hero-copy-business { width: min(82rem, calc(100% - 5rem)); margin-inline: auto; padding-top: 0; }
+.autonomous-hero-layout { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); align-items: center; gap: clamp(2.5rem, 6vw, 6rem); }
+.autonomous-hero-copy { max-width: 40rem; }
+.bliq-brand { display: inline-flex; align-items: center; gap: .65rem; margin-bottom: 2.5rem; color: var(--foreground); font: 600 1rem var(--font-display); text-decoration: none; }
+.bliq-brand-mark { display: grid; width: 2.5rem; height: 2.5rem; place-items: center; border: 1px solid #aeb7a055; border-radius: .75rem; background: #303735; }
+.bliq-brand-mark img { display: block; width: 1.7rem; height: auto; }
+.bliq-brand-divider { width: 1px; height: 1.5rem; margin-inline: .2rem; background: color-mix(in oklab, #aeb7a0 42%, var(--border)); }
+.bliq-brand > span:last-child { color: #aeb7a0; font-size: .72rem; font-weight: 500; }
+.hero-autonomous .eyebrow { color: #aeb7a0; }
+.hero-autonomous .autonomous-hero-copy h1 { max-width: 11ch; color: var(--foreground); font-size: clamp(2.75rem, 5vw, 5rem); line-height: .98; }
+.hero-autonomous .autonomous-hero-copy h1 .text-accent { color: #76a4f2; }
+.autonomous-intro { max-width: 36rem; margin-top: 1.5rem; color: var(--muted-foreground); font-size: 1rem; line-height: 1.75; }
+.autonomous-discussion { margin-top: 1.5rem; padding: 1rem 1.1rem; border: 1px solid #aeb7a028; border-left: 3px solid #aeb7a0; border-radius: 0 .8rem .8rem 0; background: linear-gradient(110deg, #4c7fd522, #aeb7a012); }
+.autonomous-discussion-label { margin-bottom: .4rem; color: #c2d2f2; font: 600 .68rem var(--font-display); letter-spacing: .1em; text-transform: uppercase; }
+.autonomous-discussion > p:last-child { color: var(--foreground); font-size: .86rem; line-height: 1.65; }
+.autonomous-hero-links { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.4rem; margin-top: 1.5rem; }
+.autonomous-hero-links > a { display: inline-flex; align-items: center; gap: .45rem; color: #c0cfec; font-size: .8rem; font-weight: 500; text-decoration: none; }
+.autonomous-hero-links > a:hover { color: #fff; }
+.autonomous-hero-gallery { display: grid; min-width: 0; gap: .8rem; }
+.autonomous-car-feature { position: relative; min-width: 0; overflow: hidden; border: 1px solid #aeb7a060; border-radius: 1.35rem; background: #f1f2e8; box-shadow: 0 24px 70px #0005, 0 0 40px #4c7fd51c; }
+.autonomous-car-feature > img { display: block; width: 100%; aspect-ratio: 1.55; object-fit: cover; }
+.autonomous-car-feature figcaption { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .8rem 1rem; color: #414943; font: 500 .7rem var(--font-display); }
+.autonomous-car-feature figcaption a { color: #68716b; text-decoration: underline; text-underline-offset: 3px; }
+.autonomous-car-detail { display: grid; grid-template-columns: minmax(8rem, .55fr) 1fr; min-height: 9rem; overflow: hidden; border: 1px solid #aeb7a055; border-radius: 1.1rem; background: color-mix(in oklab, var(--secondary) 90%, #aeb7a0 10%); }
+.autonomous-car-detail img { display: block; width: 100%; height: 100%; min-height: 9rem; object-fit: cover; }
+.autonomous-car-detail > div { align-self: center; padding: 1rem 1.25rem; }
+.autonomous-car-detail > div span { color: #aeb7a0; font: 600 .68rem var(--font-display); letter-spacing: .12em; text-transform: uppercase; }
+.autonomous-car-detail > div p { margin-top: .45rem; color: var(--muted-foreground); font-size: .82rem; line-height: 1.55; }
+.hero-autonomous .hero-toggle { border-color: #aeb7a066; background: #aeb7a01a; color: var(--foreground); }
+.hero-autonomous .hero-toggle:hover { border-color: #aeb7a0; background: #aeb7a02b; }
+.hero-autonomous .toggle-brand-bliq { border-color: #aeb7a066; }
+.hero-autonomous .toggle-brand-gyyti { border-color: #4c7fd588; }
+
+@media (max-width: 900px) {
+  .hero-autonomous { align-items: flex-start; }
+  .hero-autonomous .hero-copy-business { width: min(100% - 3rem, 48rem); padding-top: 2rem; }
+  .autonomous-hero-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .autonomous-hero-copy { max-width: 46rem; }
+  .autonomous-hero-gallery { width: min(100%, 44rem); }
+}
+@media (max-width: 560px) {
+  .hero-autonomous { padding-block: 6.5rem 2rem; }
+  .hero-autonomous .hero-copy-business { width: calc(100% - 2rem); margin-inline: 1rem; padding-top: 1rem; }
+  .bliq-brand { margin-bottom: 1.75rem; }
+  .hero-autonomous .autonomous-hero-copy h1 { font-size: clamp(2.55rem, 12vw, 3.8rem); }
+  .autonomous-intro { font-size: .92rem; }
+  .autonomous-car-feature > img { aspect-ratio: 1.2; }
+  .autonomous-car-detail { grid-template-columns: 1fr; }
+  .autonomous-car-detail img { max-height: 11rem; }
+  .autonomous-hero-links { align-items: flex-start; flex-direction: column; }
+}
 @media (max-width: 560px) { .contact-dialog-art { height: 7rem; } }
 @media (max-width: 560px) {
   .hero-finfinder .hero-map { z-index: 3; top: 6rem; opacity: .58; }

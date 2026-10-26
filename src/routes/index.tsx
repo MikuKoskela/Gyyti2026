@@ -250,20 +250,55 @@ function Index() {
         )}
       </header>
 
-      <section className="hero-stage hero-finfinder">
+      <section className={`hero-stage hero-finfinder${autonomous ? " hero-autonomous" : ""}`}>
         <FinlandRoadMap />
         <div className="map-grid" />
         <div className="hero-vignette" />
-        <div key={autonomous ? "b" : "a"} className="hero-copy animate-stage-in">
+        <div key={autonomous ? "b" : "a"} className={`hero-copy animate-stage-in${autonomous ? " hero-copy-business" : ""}`}>
           {autonomous ? (
-            <>
-              <p className="eyebrow">{t.hero2.eyebrow}</p>
-              <h1 className="mt-5 font-display text-5xl font-semibold leading-[0.98] sm:text-7xl">
-                {t.hero2.title1} <span className="text-accent">{t.hero2.title2}</span>
-              </h1>
-              <p className="mt-7 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">{t.hero2.text}</p>
-              <div className="hero-metrics"><span><b>94%</b>{t.hero2.fill}</span><span><b>-31%</b>km</span><span><b>08:42</b>ETA</span></div>
-            </>
+            <div className="autonomous-hero-layout">
+              <div className="autonomous-hero-copy">
+                <a className="bliq-brand" href="https://www.bliq.ai/business" target="_blank" rel="noreferrer">
+                  <span className="bliq-brand-mark"><img src="/bliq-logo.svg" alt="" /></span>
+                  <span>Bliq</span>
+                  <span className="bliq-brand-divider" />
+                  <span>{t.hero2.businessTitle}</span>
+                </a>
+                <p className="eyebrow">{t.hero2.eyebrow}</p>
+                <h1 className="mt-5 font-display text-5xl font-semibold leading-[0.98] sm:text-7xl">
+                  {t.hero2.title1} <span className="text-accent">{t.hero2.title2}</span>
+                </h1>
+                <p className="autonomous-intro">{t.hero2.text}</p>
+                <div className="autonomous-discussion">
+                  <p className="autonomous-discussion-label">{t.hero2.discussionLabel}</p>
+                  <p>{t.hero2.discussion}</p>
+                </div>
+                <div className="autonomous-hero-links">
+                  <Button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}>
+                    {t.hero2.cta} <ArrowRight size={16} />
+                  </Button>
+                  <a href="https://www.bliq.ai/business" target="_blank" rel="noreferrer">
+                    {t.hero2.learnMore} <ArrowRight size={15} />
+                  </a>
+                </div>
+              </div>
+              <div className="autonomous-hero-gallery">
+                <figure className="autonomous-car-feature">
+                  <img src="/bliq-car.png" alt={t.hero2.carImageAlt} />
+                  <figcaption>
+                    <span>Bliq</span>
+                    <a href="https://www.bliq.ai/product" target="_blank" rel="noreferrer">{t.hero2.imageCredit}</a>
+                  </figcaption>
+                </figure>
+                <div className="autonomous-car-detail">
+                  <img src="/bliq-car-detail.jpg" alt={t.hero2.detailImageAlt} />
+                  <div>
+                    <span>{t.hero2.businessTitle}</span>
+                    <p>{t.hero2.businessText}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           ) : (
             <>
               <p className="eyebrow">{t.hero.eyebrow}</p>
@@ -279,9 +314,13 @@ function Index() {
             aria-pressed={autonomous}
             onClick={() => { logAction("Hero-tila vaihdettu"); setAutonomous((v) => !v); }}
           >
-            <span className="toggle-dot" /> {autonomous ? t.hero.toggleOff : t.hero.toggleOn} <ArrowRight size={15} />
+            <span className={`toggle-brand-mark${autonomous ? " toggle-brand-gyyti" : " toggle-brand-bliq"}`} aria-hidden="true">
+              <img src={autonomous ? "/Gyyti-light.png" : "/bliq-logo.svg"} alt="" />
+            </span>
+            {autonomous ? t.hero.toggleOff : t.hero.toggleOn}
+            <ArrowRight size={15} />
           </button>
-          <Button className="mt-4" onClick={openStore}>{t.hero.cta} <ArrowRight size={16} /></Button>
+          {!autonomous && <Button className="mt-4" onClick={openStore}>{t.hero.cta} <ArrowRight size={16} /></Button>}
         </div>
         <div className="hero-status" aria-hidden="true">
           <span>60.1699° N</span><span>{t.hero.country}</span><span>24.9384° E</span>
