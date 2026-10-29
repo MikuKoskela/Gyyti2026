@@ -14,9 +14,11 @@ import {
   MapPin,
   Menu,
   MessageCircle,
+  Moon,
   RouteIcon,
   ShieldCheck,
   Sparkles,
+  Sun,
   Users,
   X,
 } from "lucide-react";
@@ -25,6 +27,7 @@ import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FinlandRoadMap } from "@/components/FinlandRoadMap";
+import { RideWebApp } from "@/components/RideWebApp";
 import { detectLang, storeUrl, translations, type Lang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
@@ -63,6 +66,7 @@ const useCasePhotoUrls = [
   "https://unsplash.com/photos/a-group-of-people-sitting-on-a-couch-in-a-living-room-W5phBffrIH4",
 ];
 const featureIcons: LucideIcon[] = [Sparkles, RouteIcon, MessageCircle, Check, Users, Clock3, ShieldCheck, Leaf];
+type Theme = "light" | "dark";
 
 function BrandMark() {
   return (
@@ -118,34 +122,34 @@ function ScopeImpactIllustration({ title }: { title: string }) {
       <desc id="scope-illustration-description">{title}</desc>
       <defs>
         <linearGradient id="scope-card-fill" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#17344d" />
-          <stop offset="100%" stopColor="#0c1b2a" />
+          <stop offset="0%" stopColor="var(--scope-card-start)" />
+          <stop offset="100%" stopColor="var(--scope-card-end)" />
         </linearGradient>
         <linearGradient id="scope-route-stroke" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#548fe3" stopOpacity=".2" />
-          <stop offset="50%" stopColor="#8bdcff" />
-          <stop offset="100%" stopColor="#548fe3" stopOpacity=".25" />
+          <stop offset="0%" stopColor="var(--brand-blue)" stopOpacity=".2" />
+          <stop offset="50%" stopColor="var(--scope-route)" />
+          <stop offset="100%" stopColor="var(--brand-blue)" stopOpacity=".25" />
         </linearGradient>
         <radialGradient id="scope-glow">
-          <stop offset="0%" stopColor="#68caff" stopOpacity=".2" />
-          <stop offset="100%" stopColor="#68caff" stopOpacity="0" />
+          <stop offset="0%" stopColor="var(--map-glow)" stopOpacity=".2" />
+          <stop offset="100%" stopColor="var(--map-glow)" stopOpacity="0" />
         </radialGradient>
       </defs>
-      <rect x="1" y="1" width="558" height="388" rx="26" fill="url(#scope-card-fill)" stroke="#8bdcff" strokeOpacity=".2" />
+      <rect x="1" y="1" width="558" height="388" rx="26" fill="url(#scope-card-fill)" stroke="var(--scope-route)" strokeOpacity=".3" />
       <circle cx="468" cy="88" r="142" fill="url(#scope-glow)" />
-      <path d="M32 280H528M32 310H528M32 340H528M80 250V360M160 250V360M240 250V360M320 250V360M400 250V360M480 250V360" stroke="#8bdcff" strokeOpacity=".055" />
-      <text x="36" y="47" fill="#91a9bf" fontFamily="Space Grotesk, sans-serif" fontSize="11" fontWeight="600" letterSpacing="2.2">{title.toLocaleUpperCase()}</text>
-      <path d="M91 164C144 164 159 137 214 137s75 53 131 53 73-26 124-26" fill="none" stroke="#14304a" strokeWidth="13" strokeLinecap="round" />
+      <path d="M32 280H528M32 310H528M32 340H528M80 250V360M160 250V360M240 250V360M320 250V360M400 250V360M480 250V360" stroke="var(--scope-route)" strokeOpacity=".12" />
+      <text x="36" y="47" fill="var(--scope-label)" fontFamily="Space Grotesk, sans-serif" fontSize="11" fontWeight="600" letterSpacing="2.2">{title.toLocaleUpperCase()}</text>
+      <path d="M91 164C144 164 159 137 214 137s75 53 131 53 73-26 124-26" fill="none" stroke="var(--scope-card-end)" strokeWidth="13" strokeLinecap="round" />
       <path d="M91 164C144 164 159 137 214 137s75 53 131 53 73-26 124-26" fill="none" stroke="url(#scope-route-stroke)" strokeWidth="2.5" strokeLinecap="round" />
       {[91, 214, 345, 469].map((x, index) => (
-        <circle key={x} cx={x} cy={[164, 137, 190, 164][index]} r={index === 1 || index === 2 ? 4 : 3} fill="#9be2ff" />
+        <circle key={x} cx={x} cy={[164, 137, 190, 164][index]} r={index === 1 || index === 2 ? 4 : 3} fill="var(--scope-node)" />
       ))}
       {["01", "02", "03"].map((number, index) => (
         <g key={number} transform={`translate(${[20, 209, 398][index]} 222)`}>
-          <rect width="142" height="96" rx="15" fill="#081522" fillOpacity=".72" stroke="#8bdcff" strokeOpacity=".19" />
-          <text x="16" y="38" fill={index === 1 ? "#9be2ff" : "#6e9ed5"} fontFamily="Space Grotesk, sans-serif" fontSize="12" fontWeight="700" letterSpacing="1.5">{`SCOPE ${number}`}</text>
-          <path d="M16 67H126" stroke="#8bdcff" strokeOpacity=".18" />
-          <circle cx="120" cy="67" r="3" fill="#8bdcff" fillOpacity=".7" />
+          <rect width="142" height="96" rx="15" fill="var(--scope-card-end)" fillOpacity=".82" stroke="var(--scope-route)" strokeOpacity=".35" />
+          <text x="16" y="38" fill="var(--scope-node)" fontFamily="Space Grotesk, sans-serif" fontSize="12" fontWeight="700" letterSpacing="1.5">{`SCOPE ${number}`}</text>
+          <path d="M16 67H126" stroke="var(--scope-route)" strokeOpacity=".3" />
+          <circle cx="120" cy="67" r="3" fill="var(--scope-route)" fillOpacity=".8" />
         </g>
       ))}
     </svg>
@@ -154,6 +158,7 @@ function ScopeImpactIllustration({ title }: { title: string }) {
 
 function Index() {
   const [lang, setLang] = useState<Lang>("fi");
+  const [theme, setTheme] = useState<Theme>("light");
   const [autonomous, setAutonomous] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
@@ -162,6 +167,19 @@ function Index() {
 
   useEffect(() => { setLang(detectLang()); }, []);
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
+  useEffect(() => {
+    let initialTheme: Theme = "light";
+    try {
+      const savedTheme = localStorage.getItem("gyyti-theme");
+      if (savedTheme === "light" || savedTheme === "dark") initialTheme = savedTheme;
+    } catch (error) {
+      console.warn("[Gyyti] Could not read the saved color theme", error);
+    }
+
+    document.documentElement.classList.toggle("dark", initialTheme === "dark");
+    document.documentElement.style.colorScheme = initialTheme;
+    setTheme(initialTheme);
+  }, []);
   useEffect(() => {
     const widgetScriptSrc = "https://tally.so/widgets/embed.js";
     const loadEmbeds = () => {
@@ -199,6 +217,17 @@ function Index() {
     try { localStorage.setItem("gyyti-lang", next); } catch {}
   };
 
+  const changeTheme = (next: Theme) => {
+    setTheme(next);
+    document.documentElement.classList.toggle("dark", next === "dark");
+    document.documentElement.style.colorScheme = next;
+    try {
+      localStorage.setItem("gyyti-theme", next);
+    } catch (error) {
+      console.warn("[Gyyti] Could not save the color theme", error);
+    }
+  };
+
   const logAction = (action: string) => console.log(`[Gyyti] ${action}`);
   const openStore = () => {
     const url = storeUrl();
@@ -211,6 +240,29 @@ function Index() {
       {(["fi", "en"] as const).map((l) => (
         <button key={l} type="button" aria-pressed={lang === l} onClick={() => changeLang(l)}>{l.toUpperCase()}</button>
       ))}
+    </div>
+  );
+
+  const ThemeSwitch = (
+    <div className="theme-switch" role="group" aria-label={lang === "fi" ? "Väriteema" : "Color theme"}>
+      <button
+        type="button"
+        aria-label={lang === "fi" ? "Vaalea teema" : "Light theme"}
+        title={lang === "fi" ? "Vaalea teema" : "Light theme"}
+        aria-pressed={theme === "light"}
+        onClick={() => changeTheme("light")}
+      >
+        <Sun size={15} aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        aria-label={lang === "fi" ? "Tumma teema" : "Dark theme"}
+        title={lang === "fi" ? "Tumma teema" : "Dark theme"}
+        aria-pressed={theme === "dark"}
+        onClick={() => changeTheme("dark")}
+      >
+        <Moon size={15} aria-hidden="true" />
+      </button>
     </div>
   );
 
@@ -227,6 +279,7 @@ function Index() {
           </nav>
           <div className="flex items-center gap-3">
             {LangSwitch}
+            {ThemeSwitch}
             <div className="hidden md:block">
               <Button onClick={openStore}>{t.download} <ArrowRight size={16} /></Button>
             </div>
@@ -249,6 +302,8 @@ function Index() {
           </nav>
         )}
       </header>
+
+      <RideWebApp lang={lang} />
 
       <section className={`hero-stage hero-finfinder${autonomous ? " hero-autonomous" : ""}`}>
         <FinlandRoadMap />
@@ -321,9 +376,6 @@ function Index() {
             <ArrowRight size={15} />
           </button>
           {!autonomous && <Button className="mt-4" onClick={openStore}>{t.hero.cta} <ArrowRight size={16} /></Button>}
-        </div>
-        <div className="hero-status" aria-hidden="true">
-          <span>60.1699° N</span><span>{t.hero.country}</span><span>24.9384° E</span>
         </div>
       </section>
 
