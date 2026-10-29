@@ -68,12 +68,12 @@ export function FinlandRoadMap() {
         </desc>
         <defs>
           <linearGradient id="finland-land-fill" x1="0" y1="0" x2="0.8" y2="1">
-            <stop offset="0%" stopColor="#152436" />
-            <stop offset="100%" stopColor="#0d1927" />
+            <stop offset="0%" stopColor="var(--map-land-start)" />
+            <stop offset="100%" stopColor="var(--map-land-end)" />
           </linearGradient>
           <radialGradient id="finland-hub-glow">
-            <stop offset="0%" stopColor="#4ba8ff" stopOpacity=".32" />
-            <stop offset="100%" stopColor="#4ba8ff" stopOpacity="0" />
+            <stop offset="0%" stopColor="var(--map-glow)" stopOpacity=".32" />
+            <stop offset="100%" stopColor="var(--map-glow)" stopOpacity="0" />
           </radialGradient>
         </defs>
 
