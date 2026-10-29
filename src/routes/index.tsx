@@ -14,6 +14,7 @@ import {
   MapPin,
   Menu,
   MessageCircle,
+  Monitor,
   Moon,
   RouteIcon,
   ShieldCheck,
@@ -66,7 +67,7 @@ const useCasePhotoUrls = [
   "https://unsplash.com/photos/a-group-of-people-sitting-on-a-couch-in-a-living-room-W5phBffrIH4",
 ];
 const featureIcons: LucideIcon[] = [Sparkles, RouteIcon, MessageCircle, Check, Users, Clock3, ShieldCheck, Leaf];
-type Theme = "light" | "dark";
+type Theme = "system" | "light" | "dark";
 
 function BrandMark() {
   return (
@@ -158,7 +159,7 @@ function ScopeImpactIllustration({ title }: { title: string }) {
 
 function Index() {
   const [lang, setLang] = useState<Lang>("fi");
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("system");
   const [autonomous, setAutonomous] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
@@ -168,18 +169,27 @@ function Index() {
   useEffect(() => { setLang(detectLang()); }, []);
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
   useEffect(() => {
-    let initialTheme: Theme = "light";
     try {
       const savedTheme = localStorage.getItem("gyyti-theme");
-      if (savedTheme === "light" || savedTheme === "dark") initialTheme = savedTheme;
+      if (savedTheme === "system" || savedTheme === "light" || savedTheme === "dark") {
+        setTheme(savedTheme);
+      }
     } catch (error) {
       console.warn("[Gyyti] Could not read the saved color theme", error);
     }
-
-    document.documentElement.classList.toggle("dark", initialTheme === "dark");
-    document.documentElement.style.colorScheme = initialTheme;
-    setTheme(initialTheme);
   }, []);
+  useEffect(() => {
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+    const applyTheme = () => {
+      const isDark = theme === "dark" || (theme === "system" && systemTheme.matches);
+      document.documentElement.classList.toggle("dark", isDark);
+      document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+    };
+
+    applyTheme();
+    systemTheme.addEventListener("change", applyTheme);
+    return () => systemTheme.removeEventListener("change", applyTheme);
+  }, [theme]);
   useEffect(() => {
     const widgetScriptSrc = "https://tally.so/widgets/embed.js";
     const loadEmbeds = () => {
@@ -219,8 +229,6 @@ function Index() {
 
   const changeTheme = (next: Theme) => {
     setTheme(next);
-    document.documentElement.classList.toggle("dark", next === "dark");
-    document.documentElement.style.colorScheme = next;
     try {
       localStorage.setItem("gyyti-theme", next);
     } catch (error) {
@@ -242,9 +250,17 @@ function Index() {
       ))}
     </div>
   );
-
   const ThemeSwitch = (
     <div className="theme-switch" role="group" aria-label={lang === "fi" ? "Väriteema" : "Color theme"}>
+      <button
+        type="button"
+        aria-label={lang === "fi" ? "Laitteen teema" : "System theme"}
+        title={lang === "fi" ? "Laitteen teema" : "System theme"}
+        aria-pressed={theme === "system"}
+        onClick={() => changeTheme("system")}
+      >
+        <Monitor size={14} aria-hidden="true" />
+      </button>
       <button
         type="button"
         aria-label={lang === "fi" ? "Vaalea teema" : "Light theme"}
@@ -252,7 +268,7 @@ function Index() {
         aria-pressed={theme === "light"}
         onClick={() => changeTheme("light")}
       >
-        <Sun size={15} aria-hidden="true" />
+        <Sun size={14} aria-hidden="true" />
       </button>
       <button
         type="button"
@@ -261,7 +277,7 @@ function Index() {
         aria-pressed={theme === "dark"}
         onClick={() => changeTheme("dark")}
       >
-        <Moon size={15} aria-hidden="true" />
+        <Moon size={14} aria-hidden="true" />
       </button>
     </div>
   );

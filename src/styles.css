@@ -334,11 +334,10 @@
 .lang-switch button { min-width: 2.4rem; height: 2rem; border-radius: 999px; font: 600 .7rem var(--font-display); letter-spacing: .1em; color: var(--muted-foreground); transition: background-color .2s ease, color .2s ease; }
 .lang-switch button[aria-pressed="true"] { background: var(--brand-blue); color: #fff; }
 .theme-switch { display: inline-flex; flex: 0 0 auto; gap: 2px; padding: 2px; border: 1px solid var(--border); border-radius: 999px; }
-.theme-switch button { display: grid; width: 2rem; height: 2rem; place-items: center; border-radius: 999px; color: var(--muted-foreground); transition: background-color .2s ease, color .2s ease; }
+.theme-switch button { display: grid; width: 1.65rem; height: 2rem; place-items: center; border-radius: 999px; color: var(--muted-foreground); transition: background-color .2s ease, color .2s ease; }
 .theme-switch button:hover { color: var(--foreground); }
 .theme-switch button[aria-pressed="true"] { background: var(--brand-blue); color: #fff; }
 .theme-switch button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-
 .contact-dialog-art { position: relative; display: flex; height: 9rem; align-items: center; overflow: hidden; padding-inline: 2rem; background: radial-gradient(ellipse at 80% 0%, color-mix(in oklab, var(--accent) 42%, transparent), transparent 54%), linear-gradient(120deg, #28353c, #3e5868 58%, #6386a2); }
 .contact-dialog-art::before, .contact-dialog-art::after { position: absolute; inset: -55% -10% auto 35%; height: 170%; border: 1px solid color-mix(in oklab, #fff 22%, transparent); border-radius: 50%; content: ""; transform: rotate(-18deg); }
 .contact-dialog-art::after { inset: -66% -20% auto 49%; border-color: color-mix(in oklab, #fff 13%, transparent); }
